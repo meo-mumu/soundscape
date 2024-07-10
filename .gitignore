@@ -1,0 +1,33 @@
+# Fichiers de configuration de l'IDE
+.vscode/
+.idea/
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environnement virtuel Python
+venv_py/
+
+# Node modules pour Electron et p5.js
+node_modules/
+
+# Fichiers de build Electron
+/dist
+/electron-packager
+/electron-builder-out
+/electron-dist
+/builder/out

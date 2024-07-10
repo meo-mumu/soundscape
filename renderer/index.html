@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" http-equiv="Content-Security-Policy" content="
+      default-src 'self'; 
+      script-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'; 
+      style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; 
+      img-src 'self' data:;
+      connect-src 'self' blob: http://localhost:5000; 
+      object-src 'self'
+    ">
+  <title>sound-graph</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/addons/p5.sound.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+
+  <script src="config.js"></script>
+  <script src="utils/utils.js"></script>
+  <script src="model/guide/guide.js"></script>
+  <script src="model/api/apiService.js"></script>
+  <script src="model/syncronyser/syncronyser.js"></script>
+  <script src="renderer.js"></script>
+
+  <script src="model/sound/sounds.js"></script>
+  <script src="model/sound/sound.js"></script>
+  <script src="model/sound/soundData.js"></script>
+  <script src="model/sound/soundParticle.js"></script>
+
+  <script src="model/tag/tags.js"></script>
+  <script src="model/tag/tag.js"></script>
+
+  <script src="model/path/paths.js"></script>
+  <script src="model/path/path.js"></script>
+
+  <script src="model/tweakpane/tpane.js"></script>
+  <script src="model/tweakpane/paneGraphParameters.js"></script>
+  <script src="model/tweakpane/paneSoundCard.js"></script>
+  <script src="model/tweakpane/panePath.js"></script>
+
+</body>
+
+</html>
