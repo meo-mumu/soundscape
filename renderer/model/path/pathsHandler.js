@@ -1,4 +1,4 @@
-class Paths {
+class PathsHandler {
   constructor() {
     this.paths = [];
   }
@@ -39,6 +39,18 @@ class Paths {
       guide.receive_msg("name already used", 3, 'furtive');
     }
     return bool
+  }
+
+  show_all_paths() {
+    for (let path of this.paths) {
+      path.displayed = true;
+    }
+  }
+
+  hide_all_paths() {
+    for (let path of this.paths) {
+      path.displayed = false;
+    }
   }
 
   

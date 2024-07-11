@@ -1,16 +1,11 @@
-class Tags {
+class TagsHandler {
   constructor() {
     this.tags = [];
-    this.tags_appearence = false;
   }
 
   draw_tags() {
-    if (this.tags_appearence) {
-      for (let tag of this.tags) {
-        fill(0);
-        textSize(20);
-        text(tag.name, tag.pos.x, tag.pos.y);
-      }
+    for (let tag of this.tags) {
+      tag.draw_tag();
     }
   }
 
@@ -35,10 +30,23 @@ class Tags {
     }
   }
 
+  remove_tag_to_all_sounds_from_name_and_back_update_db(name) {
+    print('[tagsHandler] remove tag to all sounds from name: ', name);
+    for (let sound of sounds_handler.sounds) {
+      if (sound.sd.tags.includes(name)) {
+        print('remove the tag sound name ', sound.sd.name);
+        sound.sd.tags = sound.sd.tags.filter(tag => tag != name);
+      }
+    }
+    this.tags = this.tags.filter(t => t.name != name);
+    print('[tagsHandler] tags_handler.tags: ', this.tags);
+    sounds_handler.save_sounds();
+  }
+ 
   init_tags() {
     this.tags = []; // Reset tags list
-    for (let sound of sounds.sounds) {
-      if(sound.sd.tags) {
+    for (let sound of sounds_handler.sounds) {
+      if (sound.sd.tags) {
         for (let tag_name of sound.sd.tags) {
           this.add_tag_from_name(tag_name);
         }
@@ -51,8 +59,8 @@ class Tags {
   update_tags_positions() {
     // console.log('>>> update tags positions');
     const tagsInfo = {};
-    for (let sound of sounds.sounds) {
-      if(sound.sd.tags) {
+    for (let sound of sounds_handler.sounds) {
+      if (sound.sd.tags) {
         for (let tag_name of sound.sd.tags) {
           if (!tagsInfo[tag_name]) {
             tagsInfo[tag_name] = { sumX: 0, sumY: 0, count: 0 };
@@ -72,6 +80,18 @@ class Tags {
     }
   }
 
+  show_all_tags() {
+    for (let tag of this.tags) {
+      tag.displayed = true;
+    }
+  }
+
+  hide_all_tags() {
+    for (let tag of this.tags) {
+      tag.displayed = false;
+    }
+  }
 
 
-}
+
+  }

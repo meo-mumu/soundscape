@@ -31,7 +31,7 @@ def folder_vs_db(root_folder: str):
 
                     diff = False
                     if db_filepath_normalized != filepath_normalized:
-                        print(f"> [file handler > folder_vs_db] name is different: '{db_filepath_normalized}' != '{filepath_normalized}'")
+                        print(f"> [file handler > folder_vs_db] filepath is different: '{db_filepath_normalized}' != '{filepath_normalized}'")
                         diff = True
                     if sound['name'].lower() != name.lower():
                         print(f" [file handler > folder_vs_db] name is different: '{sound['name'].lower()}' != '{name.lower()}'")

@@ -1,6 +1,6 @@
 class Path {
 
-  constructor(id, name, hex_color, list_sounds_ids = [], displayed = true) {
+  constructor(id, name, hex_color, list_sounds_ids = [], displayed) {
     this.id = id;
     this.name = name;
     this.hex_color = hex_color;
@@ -20,7 +20,7 @@ class Path {
   find_sound_by_ids(list_sounds_ids) {
     let list_sounds = [];
     for (let sound_id of list_sounds_ids) {
-      let sound = sounds.sounds.find(sound => sound.sd.id == sound_id);
+      let sound = sounds_handler.sounds.find(sound => sound.sd.id == sound_id);
       list_sounds.push(sound);
     }
     return list_sounds;
@@ -80,8 +80,8 @@ class Path {
   }
 
   delete() {
-    let index = paths.paths.indexOf(this);
-    paths.paths.splice(index, 1);
+    let index = paths_handler.paths.indexOf(this);
+    paths_handler.paths.splice(index, 1);
     back_delete_path(this.id);
   }
 
@@ -95,7 +95,7 @@ class Path {
 function build_one_path(data) {
     // console.log('build_one_path from data: ', data);
     return new Path(
-      data.id ? data.id : paths.find_next_id(),
+      data.id ? data.id : paths_handler.find_next_id(),
       data.name ? data.name : '',
       data.hex_color ? data.hex_color : null,
       data.list_sounds_ids ? data.list_sounds_ids : [],

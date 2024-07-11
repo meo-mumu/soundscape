@@ -46,6 +46,11 @@ def get_all_sounds():
     print(f"> retrive {len(sounds)} sounds from db")
     return sounds
 
+def save_sounds(sounds_data):
+    sounds_table.truncate()
+    for sound in sounds_data:
+        sounds_table.insert(sound)
+
 def find_sound_by_hash_and_size(hash:str, size:int):
     Sound = Query()
     sounds = sounds_table.search((Sound.hash == hash) & (Sound.size == size))

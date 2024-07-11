@@ -1,4 +1,4 @@
-class Sounds {
+class SoundsHandler {
   constructor() {
     this.sounds = [];
     this.threshold = 100;
@@ -48,6 +48,14 @@ class Sounds {
         }
       }
     }
+  }
+  
+  save_sounds() {
+    let sounds_data = [];
+    for (let sound of this.sounds) {
+      sounds_data.push(sound.sd);
+    }
+    back_save_sounds_db(sounds_data)
   }
 
   move_to_mds_positions() {

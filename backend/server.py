@@ -14,6 +14,15 @@ CORS(app)
 def get_sounds_db():
     return jsonify(db.get_all_sounds())
 
+@app.route('/update_sounds', methods=['POST'])
+def update_sounds():
+    sounds_data = request.get_json().get('sounds_data')
+    print(f"> update_sounds {len(sounds_data)} sounds")
+    print('JE n en ferais rien')
+    # for sound_data in sounds_data:
+    #     db.upsert_document('sounds', sound_data.get('id'), sound_data)
+    return 'OK'
+
 @app.route('/update_sound', methods=['POST'])
 def update_sound():
     sound_id = request.get_json().get('sound_id')
@@ -83,8 +92,8 @@ def export_path():
     return jsonify(export_folder)
 
 
-# sounds_handler = SoundsHandler()
-# sounds = sounds_handler.sounds
+# sounds = SoundsHandler()
+# sounds = sounds.sounds
 
 # tags_handler = TagsHandler()
 # tags_handler.init_all_tag(sounds)
@@ -127,7 +136,7 @@ def export_path():
 #     tag = request.get_json().get('tag')
 #     print(f"> add tag {tag} to sound {sound_id}")
 #     tags_handler.handle_add_tag(tag, sounds[sound_id])
-#     sounds_handler.update_sounds_db()
+#     sounds.update_sounds_db()
 #     return jsonify(sounds[sound_id].to_dict())
 
 # @app.route('/remove_tag/<int:sound_id>', methods=['POST'])
@@ -135,7 +144,7 @@ def export_path():
 #     tag = request.get_json().get('tag')
 #     print(f"> remove tag {tag} to sound {sound_id}")
 #     tags_handler.handle_remove_tag(tag, sounds[sound_id])
-#     sounds_handler.update_sounds_db()
+#     sounds.update_sounds_db()
 #     return jsonify(sounds[sound_id].to_dict())
 
 # @app.route('/serve_all_tag', methods=['GET'])

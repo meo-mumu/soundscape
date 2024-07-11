@@ -27,6 +27,10 @@ async function back_get_sounds_db() {
   return data;
 }
 
+async function back_save_sounds_db(sounds_data) {
+  const response = await makeHttpRequest('http://localhost:5000/update_sounds', 'POST', { sounds_data: sounds_data });
+}
+
 async function back_update_sound(sound_id, sound_data) {
   await makeHttpRequest('http://localhost:5000/update_sound', 'POST', { sound_id, sound_data });
 }

@@ -4,7 +4,8 @@ body {
   padding: 0;
 }
 
-:root {
+/* RETRO */
+/* :root {
   --tp-base-background-color: hsla(40, 3%, 90%, 0.50);
   --tp-base-shadow-color: hsla(0, 0%, 0%, 0.30);
   --tp-button-background-color: hsla(40, 3%, 70%, 1.00);
@@ -26,9 +27,9 @@ body {
   --tp-label-foreground-color: hsla(40, 3%, 50%, 1.00);
   --tp-monitor-background-color: hsla(120, 3%, 20%, 1.00);
   --tp-monitor-foreground-color: hsla(120, 40%, 60%, 0.80);
-}
+} */
 
-
+/* BASE */
 /* :root {
   --tp-base-background-color: hsla(0, 0%, 10%, 0.80);
   --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
@@ -52,3 +53,43 @@ body {
   --tp-monitor-background-color: hsla(0, 0%, 0%, 0.30);
   --tp-monitor-foreground-color: hsla(0, 0%, 100%, 0.30);
 } */
+
+/* FIRST TRY */
+/* :root {
+  --tp-base-background-color: hsla(266, 50%, 66%, 0.875); /* Lilas Pastel comme couleur de fond principale 
+  /* --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
+  --tp-button-background-color: hsla(340, 100%, 87%, 0.8); /* Rose Pastel pour les boutons 
+  --tp-button-background-color-active: hsla(340, 100%, 87%, 0.8);
+  --tp-button-background-color-focus: hsla(340, 100%, 87%, 0.8);
+  --tp-button-background-color-hover: hsla(340, 100%, 87%, 0.8);
+  --tp-button-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
+  --tp-container-background-color: hsla(120, 40%, 80%, 0.30); /* Vert Pastel pour les conteneurs 
+  --tp-container-background-color-active: hsla(120, 40%, 80%, 0.60);
+  --tp-container-background-color-focus: hsla(120, 40%, 80%, 0.50);
+  --tp-container-background-color-hover: hsla(120, 40%, 80%, 0.40);
+  --tp-container-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
+  --tp-groove-foreground-color: hsla(0, 0%, 0%, 0.20);
+  --tp-input-background-color: hsla(120, 40%, 80%, 0.30); /* Vert Pastel pour les champs de saisie 
+  --tp-input-background-color-active: hsla(120, 40%, 80%, 0.60);
+  --tp-input-background-color-focus: hsla(120, 40%, 80%, 0.50);
+  --tp-input-background-color-hover: hsla(120, 40%, 80%, 0.40);
+  --tp-input-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
+  --tp-label-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
+  --tp-monitor-background-color: hsla(270, 60%, 80%, 0); /* Lilas Pastel pour les moniteurs 
+  --tp-monitor-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
+  }  */
+
+/* GPT  */
+:root {
+  --tp-base-background-color: hsla(266, 80%, 88%, 0.9);
+  --tp-button-background-color: hsla(339, 100%, 94%, 0.779);
+  --tp-container-background-color: hsla(132, 15%, 87%, 0.685);
+  --tp-input-background-color: hsla(131, 86%, 78%, 0.435);
+  --tp-monitor-background-color: hsla(266, 80%, 88%, 0.9);
+
+  --tp-button-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-container-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-input-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-label-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-monitor-foreground-color: hsla(220, 100%, 25%, 1);
+}

@@ -43,14 +43,14 @@ class Sound {
   async add_tag(name) {
     console.log('[sound] add tag: ', name);
     this.sd.tags.push(name);
-    tags.add_tag_from_name(name);
+    tags_handler.add_tag_from_name(name);
     back_update_sound(this.sd.id, this.sd);
   }
 
   async remove_tag(name) {
     console.log('[sound] remove tag: ', name);
     this.sd.tags = this.sd.tags.filter(tag => tag != name);
-    tags.remove_tag_from_name(name);
+    tags_handler.remove_tag_from_name(name);
     back_update_sound(this.sd.id, this.sd);
   }
 

@@ -4,7 +4,6 @@ cd /home/mumu/soundscape ; npx electron-forge start
 
 let user_defining_path = false;
 let canvas_bg_color;
-let tpane;
 
 async function setup() {
   // // frameRate(1);
@@ -13,12 +12,12 @@ async function setup() {
   guide = new Guide();
   canvas_bg_color = config.CANVAS_BG_COLOR_IDLE;
 
-  sounds = new Sounds();
-  tags = new Tags();
-  paths = new Paths();
+  sounds_handler = new SoundsHandler();
+  tags_handler = new TagsHandler();
+  paths_handler = new PathsHandler();
   
   await sync_from_db();
-  tpane = new TPane();
+  panes_handler = new PanesHandler();
   sync_from_filesystem();
 }
 
@@ -36,9 +35,9 @@ function draw() {
   scale(zoom_scale_value);
 
   guide.draw_message();
-  sounds.draw_sounds();
-  tags.draw_tags();
-  paths.draw_paths();
+  sounds_handler.draw_sounds();
+  tags_handler.draw_tags();
+  paths_handler.draw_paths();
 
   pop();
 
@@ -46,10 +45,6 @@ function draw() {
   // text(fps, 50, 50);
 
 }
-
-
-
-
 
 
 // -----------------------------------------------------------
@@ -84,7 +79,7 @@ function mouseDragged(event) {
       current_dragging_sound.sp.move_from_grab();
     }
     else {
-      for (let sound of sounds.sounds) {
+      for (let sound of sounds_handler.sounds) {
         if (sound.sp.isMouseInSound() || sound.sp.dynamic_state == dynamic_state.GRABBED) {
           current_dragging_sound = sound;
         }
@@ -95,9 +90,9 @@ function mouseDragged(event) {
 
 function mouseClicked() {
   if (mouseButton === LEFT && user_defining_path) {
-    for (let sound of sounds.sounds) {
+    for (let sound of sounds_handler.sounds) {
       if (sound.sp.isMouseInSound()) {
-        let path_on_building = tpane.pane_path.current_path;
+        let path_on_building = panes_handler.pane_paths.current_path;
         if (!path_on_building.list_sounds_ids.includes(sound.sd.id)) {
           path_on_building.add_sound(sound);
         }
@@ -113,7 +108,7 @@ function mouseClicked() {
 function mouseReleased() {
   panning_canvas = false;
   current_dragging_sound = null;
-  for (let sound of sounds.sounds) {
+  for (let sound of sounds_handler.sounds) {
     if (sound.sp.dynamic_state == dynamic_state.GRABBED) {
       sound.sp.release_from_grab();
     }
@@ -121,7 +116,7 @@ function mouseReleased() {
 }
 
 function mousePressed() {
-  for (let sound of sounds.sounds) {
+  for (let sound of sounds_handler.sounds) {
     if (sound.sp.isMouseInSound()) {
       if (millis() - lastClickTime < doubleClickDelay) {
         doubleClickedProcess(sound);
@@ -133,21 +128,21 @@ function mousePressed() {
 }
 
 async function doubleClickedProcess(sound) {
-  other_sounds = sounds.sounds.filter(s => s != sound);
+  other_sounds = sounds_handler.sounds.filter(s => s != sound);
   for (let s of other_sounds) {
     if (s.sp.selected_state == selected_state.SELECTED) {
       s.sp.selected_state = selected_state.IDLE;
-      tpane.pane_sound_card.f_sound_card.hidden = true;
+      panes_handler.pane_sound_card.f_sound_card.hidden = true;
     }
   }
   if (sound.sp.selected_state == selected_state.SELECTED) {
     sound.sp.selected_state = selected_state.IDLE;
-    tpane.pane_sound_card.f_sound_card.hidden = true;
+    panes_handler.pane_sound_card.f_sound_card.hidden = true;
   }
   else {
     sound.sp.selected_state = selected_state.SELECTED;
-    tpane.pane_sound_card.build_sound_card(sound);
+    panes_handler.pane_sound_card.build_sound_card(sound);
     sound.load_song();
   }
-  tpane.pane.refresh();
+  panes_handler.panes.refresh();
 }

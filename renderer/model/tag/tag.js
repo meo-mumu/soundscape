@@ -1,22 +1,26 @@
 class Tag {
-  constructor(name, nb_occurence,  x, y) {
+  constructor(name, nb_occurence, x, y) {
     this.name = name
     this.pos = createVector(x, y)
     this.nb_occurence = nb_occurence
+    this.displayed = false
   }
-}
 
-// function build_one_tag(back_tag) {
-//   try {
-//     const x = back_tag.x !== undefined ? back_tag.x : Math.random() * windowWidth
-//     const y = back_tag.y !== undefined ? back_tag.y : Math.random() * windowHeight
-//     const t = new Tag(
-//       back_tag.name,
-//       back_tag.x,
-//       back_tag.y
-//     );
-//     return t
-//   } catch (error) {
-//       console.error("Could not build new tag:", error);
-//     }
-// }
+  modifify_name(name) {
+    this.name = name
+    for (sound of sound_handler.sounds) {
+      if (sound.sd.tags.includes(this.name)) {
+        sound.sd.tags[sound.sd.tags.indexOf(this.name)] = name
+      }
+    }
+  }
+
+  draw_tag() {
+    if (this.displayed) {
+      fill(0);
+      textSize(20);
+      text(this.name, this.pos.x, this.pos.y);
+    }
+  }
+
+}
