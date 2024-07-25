@@ -1,49 +1,20 @@
 const API_BACK_URL = 'http://localhost:5000'
-const root_folder = '/home/mumu/sound/little'
+const root_folder = '/home/mumu/sound/dig'
 
-// ---------------------------------------------- user interraction
-let lastClickTime = 0
-const doubleClickDelay = 250
-let current_dragging_sound
-let panning_canvas = false
-const panning_scale_factor = 0.8
-let panX = 0
-let panY = 0
-let zoom_scale_value = 1
-let mouseX_panned_scaled = 0
-let mouseY_panned_scaled = 0
-
-const dynamic_state = {
-  IDLE: 'idle',
-  GRABBED: 'grabbed'
-}
-
-const selected_state = {
-  IDLE: 'idle',
-  SELECTED: 'selected'
-}
-
-const playing_state = {
-  PLAYED: 'playing',
-  STOPPED: 'stopped',
-  PAUSED: 'paused'
-}
-
-
-
+let canvas_bg_color;
 
 class Config {
   constructor() {
     // ---------------------------------------------- particules physics
     this.DAMPENING_BORDER_FACTOR = 0.9
     this.CANVAS_FRICTION_FORCE = 0.85
-    this.PARTICULE_CHECKING_AREA = 30
+    this.PARTICULE_CHECKING_AREA = 40
     this.MAXVEL = 10
     this.MAXFORCE = 4
 
     // ---------------------------------------------- sound appearence
     this.R_CIRCLE = 10
-    this.ROUNDNESS_SQUARE = 3
+    this.ROUNDNESS_SQUARE = 1
 
     // ---------------------------------------------- particules info text
     this.TEXT_PARTICULE_FONT_FAMILY = 'Courier New'
@@ -60,8 +31,12 @@ class Config {
     // let grabbed_fill_color = color(228, 190, 247, 200)
     // let text_particule_color = color(50, 80, 153)
 
-    this.SEARCHED_COLOR = color(255, 105, 180);
-
+    this.SEARCHED_COLOR = [
+      color(255, 179, 71, 200), // Orange fluo plus clair
+      color(255, 204, 0, 200),  // Jaune fluo plus clair
+      color(255, 105, 97, 200), // Rouge fluo plus clair
+      color(255, 255, 255, 200),
+    ];
     this.BPM_COLOR = {
       1: color("#ccffff"),
       2: color("#99ffcc"),
@@ -103,6 +78,35 @@ class Config {
       'Am': color("#B89ECC")
     }
 
+  }
+
+  set_bpm_color(bpm) {
+    let colorIndex;
+    let lerpFactor;
+    if (bpm < 50) {
+      return this.BPM_COLOR['1']; // Corrected to use string key
+    } else if (bpm < 90) {
+      colorIndex = 1; // Start from 1 to match the keys in BPM_COLOR
+      lerpFactor = map(bpm, 50, 90, 0, 1);
+    } else if (bpm < 110) {
+      colorIndex = 2;
+      lerpFactor = map(bpm, 90, 110, 0, 1);
+    } else if (bpm < 125) {
+      colorIndex = 3;
+      lerpFactor = map(bpm, 110, 125, 0, 1);
+    } else if (bpm < 140) {
+      colorIndex = 4;
+      lerpFactor = map(bpm, 125, 140, 0, 1);
+    } else if (bpm < 160) {
+      colorIndex = 5;
+      lerpFactor = map(bpm, 140, 160, 0, 1);
+    } else {
+      return this.BPM_COLOR['6']; // Corrected to use string key
+    }
+    if (bpm >= 50 && bpm <= 160) {
+      // Ensure colorIndex and colorIndex + 1 are valid keys as strings
+      return lerpColor(this.BPM_COLOR[String(colorIndex)], this.BPM_COLOR[String(colorIndex + 1)], lerpFactor);
+    }
   }
   
 }

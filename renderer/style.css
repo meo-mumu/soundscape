@@ -79,14 +79,27 @@ body {
   --tp-monitor-foreground-color: rgb(8, 37, 111); /* Texte en bleu 
   }  */
 
-/* GPT  */
+/* GPT 
 :root {
   --tp-base-background-color: hsla(266, 80%, 88%, 0.9);
   --tp-button-background-color: hsla(339, 100%, 94%, 0.779);
   --tp-container-background-color: hsla(132, 15%, 87%, 0.685);
   --tp-input-background-color: hsla(131, 86%, 78%, 0.435);
   --tp-monitor-background-color: hsla(266, 80%, 88%, 0.9);
+  --tp-button-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-container-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-input-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-label-foreground-color: hsla(220, 100%, 25%, 1);
+  --tp-monitor-foreground-color: hsla(220, 100%, 25%, 1);
+}
+*/
 
+:root {
+  --tp-base-background-color: hsla(260, 80%, 88%, 0.942);
+  --tp-button-background-color: hsla(339, 100%, 94%, 0.709);
+  --tp-container-background-color: hsla(255, 25%, 70%, 0.707);
+  --tp-input-background-color: hsla(131, 86%, 78%, 0.435);
+  --tp-monitor-background-color: hsla(100, 4%, 74%, 0.545);
   --tp-button-foreground-color: hsla(220, 100%, 25%, 1);
   --tp-container-foreground-color: hsla(220, 100%, 25%, 1);
   --tp-input-foreground-color: hsla(220, 100%, 25%, 1);

@@ -18,9 +18,8 @@ def get_sounds_db():
 def update_sounds():
     sounds_data = request.get_json().get('sounds_data')
     print(f"> update_sounds {len(sounds_data)} sounds")
-    print('JE n en ferais rien')
-    # for sound_data in sounds_data:
-    #     db.upsert_document('sounds', sound_data.get('id'), sound_data)
+    for sound_data in sounds_data:
+        db.upsert_document('sounds', sound_data.get('id'), sound_data)
     return 'OK'
 
 @app.route('/update_sound', methods=['POST'])
@@ -36,7 +35,6 @@ def get_news_filepath():
     root_folder = request.get_json().get('root_folder')
     print(f"> get_new_filepath from {root_folder}")
     news_filepath: list[str] = fh.handle_changes_in_sound_file_folder(root_folder)
-    # print(f"Foundddddddddddddddd {news_filepath} new files")
     return jsonify(news_filepath)
 
 @app.route('/analyse_audio', methods=['POST'])

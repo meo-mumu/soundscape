@@ -41,6 +41,7 @@ class Path {
 
   draw_path() {
     if (this.list_sounds.length > 0 && this.displayed) {
+      push()
       stroke(this.color);
       strokeWeight(this.stroke_weight);
       noFill();
@@ -54,6 +55,7 @@ class Path {
       let last_sound = this.list_sounds[this.list_sounds.length - 1];
       curveVertex(last_sound.sp.pos.x, last_sound.sp.pos.y);
       endShape();
+      pop()
     }
   }
 

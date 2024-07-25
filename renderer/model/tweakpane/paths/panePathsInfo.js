@@ -17,12 +17,13 @@ class PanePathsInfo {
         view: 'list',
         label: 'paths list',
         options: opt,
-        value: this.pane_paths.current_path ? this.pane_paths.current_path.name : '',
+        value: this.pane_paths.current_path ? this.pane_paths.current_path.id : ''
       });
       path_list.on('change', (value) => {
         let path = paths_handler.paths.find(sp => sp.id == value.value);
         this.pane_paths.current_path = path;
-        setTimeout(() => this.pane_paths.panes_handler.build_panes(), 0);
+        this.pane_paths.expanded = true;
+        setTimeout(() => panes_handler.build_panes(), 0);
       });
     }
   }
@@ -33,17 +34,18 @@ class PanePathsInfo {
     // console.log('>>> build ', this.pane_paths.current_path.name, ' info: ');
 
     let params = {
-      'name': this.pane_paths.current_path.name,
+      'modify name': '',
       'color': this.pane_paths.current_path.hex_color,
       'display': this.pane_paths.current_path.displayed,
     };
 
-    let name_input = this.pane_paths.f_paths.addInput(params, 'name');
+    let name_input = this.pane_paths.f_paths.addInput(params, 'modify name');
     name_input.on('change', (value) => {
       if (!paths_handler.check_path_name_exists_already(value.value)) {
         this.pane_paths.current_path.name = value.value;
         this.pane_paths.current_path.save();
-        setTimeout(() => this.pane_paths.panes_handler.build_panes(), 0);
+        this.pane_paths.expanded = true;
+        setTimeout(() => panes_handler.build_panes(), 0);
       }
     });
 
@@ -79,14 +81,16 @@ class PanePathsInfo {
       this.pane_paths.current_path.is_on_building = true;
       this.pane_paths.pane_paths_building.is_continuing_path = true;
       // console.log('>>> continue path ', this.pane_paths.current_path.id);
-      setTimeout(() => this.pane_paths.panes_handler.build_panes(), 0);
+      this.pane_paths.expanded = true;
+      setTimeout(() => panes_handler.build_panes(), 0);
     });
 
     let btn_remove_path = this.pane_paths.f_paths.addButton({ title: 'remove path' });
     btn_remove_path.on('click', () => {
       this.pane_paths.current_path.delete();
       this.pane_paths.current_path = null;
-      setTimeout(() => this.pane_paths.panes_handler.build_panes(), 0);
+      this.pane_paths.expanded = true;
+      setTimeout(() => panes_handler.build_panes(), 0);
     });
 
     let btn_export_path = this.pane_paths.f_paths.addButton({ title: 'export path' });

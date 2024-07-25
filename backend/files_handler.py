@@ -70,9 +70,14 @@ def export_path(root_folder: str, path_id: int):
     
     os.makedirs(export_folder)
     
-    for sound in sounds:
-        print(f"> [file handler] Export {sound['filepath']}")
-        shutil.copy(sound['filepath'], export_folder)
+    for index, sound in enumerate(sounds, start=1):
+        # Construire le nouveau nom de fichier
+        original_filename = os.path.basename(sound['filepath'])
+        new_filename = f"{index}_{sound['bpm']}_{original_filename}"
+        new_filepath = os.path.join(export_folder, new_filename)
+        
+        print(f"> [file handler] Export {sound['filepath']} as {new_filename}")
+        shutil.copy(sound['filepath'], new_filepath)
     
     print(f"> [file handler] Export {pth['name']} in {export_folder}")
     return export_folder

@@ -6,6 +6,8 @@ import db_handler as db
 def calc_sounds_mds_position(window_width, window_height):
     print("> calc_sounds_mds_position with window_width", window_width, "and window_height", window_height)
     sounds = db.get_all_sounds()
+    if len(sounds) == 0:
+        return
     sounds_ids = [sound.doc_id for sound in sounds]
     n = len(sounds_ids)
     dissimilarity_matrix = np.zeros((n, n))

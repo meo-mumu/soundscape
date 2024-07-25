@@ -52,7 +52,6 @@ class PathsHandler {
       path.displayed = false;
     }
   }
-
   
 
 }

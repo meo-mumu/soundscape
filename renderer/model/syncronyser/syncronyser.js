@@ -27,14 +27,17 @@ async function init_tags_and_mds_positions() {
   tags_handler.init_tags();
 
   // 2. update mds positions des sounds et move to it
-  guide.receive_msg("Calculating sounds positions from their tags and move to it", 1, 'staging');
-  back_sounds = await back_calc_sounds_mds_position();
-  sounds_handler.update_mds_positions(back_sounds);
-  sounds_handler.move_to_mds_positions();
+  // guide.receive_msg("Calculating sounds positions from their tags and move to it", 1, 'staging');
+  // back_sounds = await back_calc_sounds_mds_position();
+  // sounds_handler.update_mds_positions(back_sounds);
+  // sounds_handler.move_to_mds_positions();
 
   // 3. update tags position
-  guide.receive_msg("Calculating tags positions", 1, 'furtive');
-  tags_handler.update_tags_positions();
+  // guide.receive_msg("Calculating tags positions", 1, 'furtive');
+  // tags_handler.update_tags_positions();
+
+  // 4. build panes
+  // if(panes_handler) panes_handler.build_panes();
 }
 
 
@@ -50,7 +53,7 @@ async function sync_from_filesystem() {
   if (news_filepath.length > 0) {
     console.log('[sync] news_filepath : ', news_filepath)
     guide.receive_msg("Found " + news_filepath.length + " new sounds", 1, 'furtive');
-    analyse_news_sound(news_filepath);
+    await analyse_news_sound(news_filepath);
     await init_tags_and_mds_positions();
   }
 }

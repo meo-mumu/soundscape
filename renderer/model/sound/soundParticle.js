@@ -5,6 +5,12 @@ const sound_appearence = {
   MORPH_TO_RECT: 'morph_to_rect'
 }
 
+const playing_state = {
+  PLAYED: 'playing',
+  STOPPED: 'stopped',
+  PAUSED: 'paused'
+}
+
 class SoundParticle {
 
   constructor(sd) {
@@ -22,80 +28,83 @@ class SoundParticle {
       this.camelot_color = color(0);
     }
 
-    // Supposons que `color` est une fonction de p5.js et que `config.BPM_COLOR` est défini comme montré précédemment.
-    let normalizedBpm = map(sd.bpm, 0, 200, 0, 1);
-
-    // Détermine dans quel segment de BPM normalisé se trouve la valeur
-    if (normalizedBpm < 0.2) {
-      this.bpm_color = lerpColor(config.BPM_COLOR[1], config.BPM_COLOR[2], normalizedBpm * 5);
-    } else if (normalizedBpm < 0.4) {
-      this.bpm_color = lerpColor(config.BPM_COLOR[2], config.BPM_COLOR[3], (normalizedBpm - 0.2) * 5);
-    } else if (normalizedBpm < 0.6) {
-      this.bpm_color = lerpColor(config.BPM_COLOR[3], config.BPM_COLOR[4], (normalizedBpm - 0.4) * 5);
-    } else if (normalizedBpm < 0.8) {
-      this.bpm_color = lerpColor(config.BPM_COLOR[4], config.BPM_COLOR[5], (normalizedBpm - 0.6) * 5);
-    } else {
-      this.bpm_color = lerpColor(config.BPM_COLOR[5], config.BPM_COLOR[6], (normalizedBpm - 0.8) * 5);
-    }
-
+    this.bpm_color = config.set_bpm_color(sd.bpm);
 
     this.fill_color = this.bpm_color;
     this.last_fill_color = this.fill_color
 
-    this.dynamic_state = dynamic_state.IDLE;
+    this.is_dragging = false;
+    this.is_selected = false;
+
     this.playing_state = playing_state.STOPPED;
-    this.selected_state = selected_state.IDLE;
     this.sound_appearence = sound_appearence.CIRCLE;
 
     this.morph_state = 0;
 
     this.is_moving_to_mds_position = false;
     this.searched = false;
+
+    this.colorIndex = 0;
+    this.lastUpdateTime = 0;
+    this.colorChangeInterval = 50;
+
+    this.sample_repel = soundDesign.samples[0].sound;
   }
+
 
   draw_sound_particle() {
     this._update_position();
-    this._update_appearence_from_states();
+    this._update_fill_color_appearence();
+    this._update_form_appearence();
   }
 
   repel(other_sp) {
     let d = dist(this.pos.x, this.pos.y, other_sp.pos.x, other_sp.pos.y);
     d = d - abs(this.r - other_sp.r);
-    if (d < config.PARTICULE_CHECKING_AREA && this.dynamic_state != dynamic_state.GRABBED) {
+    if (d < config.PARTICULE_CHECKING_AREA && !this.is_selected) {
+
+      // if (!this.sample_repel.isPlaying()) {
+      //   this.sample_repel.play();
+      // }
+
       let force = p5.Vector.sub(this.pos, other_sp.pos);
       force.div((d * 2 + 0.001));
       this._apply_force(force);
     }
   }
 
-  _update_appearence_from_states() {
-    // this._update_dynamic_appearence();
-    fill(this.fill_color);
+  _update_fill_color_appearence() {
     if (this.searched) {
-      fill(color(random(255), random(255), random(255), 255))
-    } 
-    this._update_selected_appearence();
+      let elapsedTime = millis() - this.lastUpdateTime;
+
+      if (elapsedTime > this.colorChangeInterval) {
+        this.colorIndex = (this.colorIndex + 1) % config.SEARCHED_COLOR.length;
+        this.lastUpdateTime = millis();
+      }
+
+      let factor = (elapsedTime % this.colorChangeInterval) / this.colorChangeInterval;
+      let nextColorIndex = (this.colorIndex + 1) % config.SEARCHED_COLOR.length;
+
+      let oscColor = lerpColor(config.SEARCHED_COLOR[this.colorIndex], config.SEARCHED_COLOR[nextColorIndex], factor);
+      fill(oscColor);
+    } else {
+      fill(this.fill_color);
+    }
   }
 
-  // _update_dynamic_appearence() {
-  //   if (this.dynamic_state == dynamic_state.IDLE) {
-  //     fill(this.fill_color);
-  //   } else {
-  //     fill(smp.grabbed_fill_color);
-  //   }
-  // }
 
-  _update_selected_appearence() {
-    if (this.selected_state == selected_state.IDLE && this.sound_appearence == sound_appearence.CIRCLE) {
+
+  _update_form_appearence() {
+    if (!this.is_selected && this.sound_appearence == sound_appearence.CIRCLE) {
       this._draw_circle();
     }
-    else if (this.selected_state == selected_state.SELECTED && this.sound_appearence == sound_appearence.RECT) {
+    else if (this.is_selected && this.sound_appearence == sound_appearence.RECT) {
       this._draw_rect();
     }
-    else if (this.selected_state == selected_state.IDLE && this.sound_appearence == sound_appearence.RECT) {
+    else if (!this.is_selected && this.sound_appearence == sound_appearence.RECT) {
       this._morph_to_circle();
     }
-    else if (this.selected_state == selected_state.SELECTED && this.sound_appearence == sound_appearence.CIRCLE) {
+    else if (this.is_selected && this.sound_appearence == sound_appearence.CIRCLE) {
       this._morph_to_rect();
     }
   }
@@ -109,7 +118,6 @@ class SoundParticle {
     rectMode(CENTER);
     rect(this.pos.x, this.pos.y, this.r, this.r, config.ROUNDNESS_SQUARE);
   }
-
 
   _morph_to_circle() {
     this.morph_state += 0.1;
@@ -125,7 +133,7 @@ class SoundParticle {
     }
     if (this.morph_state >= 1) {
       this.sound_appearence = sound_appearence.CIRCLE;
-      console.log("morph to little circle is finished");
+      // console.log("morph to little circle is finished");
       this.morph_state = 0;
     }
   }
@@ -146,7 +154,7 @@ class SoundParticle {
     }
     if (this.morph_state >= 1) {
       this.sound_appearence = sound_appearence.RECT;
-      console.log("morph to big rect is finished");
+      // console.log("morph to big rect is finished");
       this.morph_state = 0;
     }
   }
@@ -186,7 +194,6 @@ class SoundParticle {
     }
   }
 
-
   _apply_force(force) {
     force.limit(config.MAXFORCE);
     this.acc.add(force);
@@ -207,19 +214,18 @@ class SoundParticle {
   }
 
   // ------------------ mouse interaction
-
   isMouseInSound() {
     return dist(this.pos.x, this.pos.y, mouseX_panned_scaled, mouseY_panned_scaled) < this.r;
   }
 
   move_from_grab() {
-    this.dynamic_state = dynamic_state.GRABBED;
+    this.is_dragging = true;
     this.pos.x = mouseX_panned_scaled;
     this.pos.y = mouseY_panned_scaled;
   }
 
   release_from_grab() {
-    this.dynamic_state = dynamic_state.IDLE;
+    this.is_dragging = false;
   }
 
 }

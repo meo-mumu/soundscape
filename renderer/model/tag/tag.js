@@ -3,23 +3,25 @@ class Tag {
     this.name = name
     this.pos = createVector(x, y)
     this.nb_occurence = nb_occurence
-    this.displayed = false
+    this.display_center = false
+    this.filter_sounds = false
   }
 
   modifify_name(name) {
+    let older_name = this.name
     this.name = name
-    for (sound of sound_handler.sounds) {
-      if (sound.sd.tags.includes(this.name)) {
-        sound.sd.tags[sound.sd.tags.indexOf(this.name)] = name
-      }
+    for (let sound of sounds_handler.sounds) {
+      sound.sd.tags = sound.sd.tags.map(tag => tag == older_name ? name : tag)
     }
   }
 
   draw_tag() {
-    if (this.displayed) {
+    if (this.display_center) {
+      push()
       fill(0);
-      textSize(20);
+      textSize(10);
       text(this.name, this.pos.x, this.pos.y);
+      pop()
     }
   }
 

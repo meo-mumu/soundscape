@@ -2,13 +2,13 @@ class PaneSoundsMonoTags {
 
   constructor(pane_sounds) {
     this.pane_sounds = pane_sounds
+    this.f_tags
   }
 
 
-  build(sound) {
-    console.log('>>> build sound card tags');
-    this.f_tags.hidden = true;
-    this.f_tags = this.f_sound_card.addFolder({ title: 'tags (click to remove)' });
+  build() {
+    let sound = sounds_handler.selected_sounds[0];
+    this.f_tags = this.pane_sounds.pane_sounds_mono_info.f_sound.addFolder({ title: 'modify tags' });
     this.build_tags_btn(sound);
     this.build_tags_input_list(sound);
   }
@@ -18,7 +18,7 @@ class PaneSoundsMonoTags {
       let btn = this.f_tags.addButton({ title: tag_name + ' x' });
       btn.on('click', () => {
         sound.remove_tag(tag_name);
-        setTimeout(() => this.build_sound_card_tags(sound), 0);
+        setTimeout(() => panes_handler.build_panes(), 0);
       });
     }
   }
@@ -38,7 +38,7 @@ class PaneSoundsMonoTags {
       view: 'list',
       label: '+ tag :',
       options: opt,
-      value: '',
+      value: 'sdf',
     });
     tag_list.on('change', (value) => {
       let tag_name = value.value;
@@ -46,7 +46,7 @@ class PaneSoundsMonoTags {
         this.build_new_tag_input(sound);
       } else {
         sound.add_tag(tag_name);
-        setTimeout(() => this.build_sound_card_tags(sound), 0);
+        setTimeout(() => panes_handler.build_panes(), 0);
       }
     });
   }
@@ -63,7 +63,7 @@ class PaneSoundsMonoTags {
       if (!sound.sd.tags.includes(tag_name)) {
         console.log('new tag value: ', tag_name);
         sound.add_tag(tag_name);
-        setTimeout(() => this.build_sound_card_tags(sound), 0);
+        setTimeout(() => panes_handler.build_panes(), 0);
       }
       else {
         console.log('tag already exists');

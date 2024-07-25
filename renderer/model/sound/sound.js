@@ -7,26 +7,29 @@ class Sound {
     this.song_time = 0;
     this.i;
     this.j;
+    this.is_displayed = true;
 
   }
 
   // ---------- draw
 
   draw_sound() {
-    push();
-    this.sp.draw_sound_particle();
-    this._draw_info_text();
-    pop();
+    if (this.is_displayed) {
+      push();
+      this.sp.draw_sound_particle();
+      this._draw_info_text();
+      pop();
+    }
   }
 
   _draw_info_text() {
     noStroke();
-    let alpha = map(zoom_scale_value, 1, 1.8, 200, 255);
+    let alpha = map(user_interactions.zoom_scale_value, 1, 2, 0, 255);
     fill(color(50, 80, 153, alpha));
     textFont(config.TEXT_PARTICULE_FONT_FAMILY);
     textSize(config.TEXT_PARTICULE_SIZE);
     textAlign(CENTER, CENTER);
-    let artist_title = this.sd.artist ? this.sd.artist   + " - " + this.sd.title : this.sd.title;
+    let artist_title = this.sd.artist ? this.sd.artist + " - " + this.sd.title : this.sd.title;
     text(artist_title, this.sp.pos.x, this.sp.pos.y + this.sp.r / 2 + config.TEXT_PARTICULE_PADDING);
   }
 
@@ -38,8 +41,9 @@ class Sound {
   }
 
 
+
   // ---------- interaction from renderer.js
-  
+
   async add_tag(name) {
     console.log('[sound] add tag: ', name);
     this.sd.tags.push(name);

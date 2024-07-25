@@ -2,7 +2,7 @@ class PanePaths {
 
   constructor(panes_handler) {
     this.panes_handler = panes_handler;
-    this.expanded = true;
+    this.expanded = false;
     this.f_paths = this.panes_handler.panes.addFolder({ title: 'Paths', expanded: this.expanded });
     this.current_path;
     
@@ -18,7 +18,7 @@ class PanePaths {
 
     this.pane_paths_global.build();
 
-    if (user_defining_path === false) {
+    if (user_interactions.user_defining_path === false) {
       this.pane_paths_building.build_btn_begin_new_path();
       this.pane_paths_info.build_paths_input_list();
       if (this.current_path) {
@@ -26,6 +26,7 @@ class PanePaths {
       }
     }
    else {
+    this.expanded = true;
       this.pane_paths_building.build_end_path();
     }
     

@@ -42,7 +42,27 @@ class TagsHandler {
     print('[tagsHandler] tags_handler.tags: ', this.tags);
     sounds_handler.save_sounds();
   }
- 
+
+  remove_tag_to_selected_sounds_and_back_update_db(name) {
+    console.log('[tags] remove tag to all selected sounds from name: ', name);
+    for (let sound of sounds_handler.selected_sounds) {
+      sound.sd.tags = sound.sd.tags.filter(tag => tag != name);
+    }
+    this.tags = this.tags.filter(t => t.name != name);
+    sounds_handler.save_selected_sounds();
+  }
+
+  add_tag_to_selected_sounds_and_back_update_db(tag_name) {
+    console.log('[tags] add new tag to selected sounds and back update db: ', tag_name);
+    for (let sound of sounds_handler.selected_sounds) {
+      if (!sound.sd.tags.includes(tag_name)) {
+        sound.sd.tags.push(tag_name);
+        this.add_tag_from_name(tag_name);
+      }
+    }
+    sounds_handler.save_selected_sounds();
+  }
+
   init_tags() {
     this.tags = []; // Reset tags list
     for (let sound of sounds_handler.sounds) {
@@ -52,46 +72,41 @@ class TagsHandler {
         }
       }
     }
-    this.update_tags_positions();
     console.log('[tags] after init tags: ', this.tags);
   }
 
   update_tags_positions() {
-    // console.log('>>> update tags positions');
-    const tagsInfo = {};
-    for (let sound of sounds_handler.sounds) {
-      if (sound.sd.tags) {
-        for (let tag_name of sound.sd.tags) {
-          if (!tagsInfo[tag_name]) {
-            tagsInfo[tag_name] = { sumX: 0, sumY: 0, count: 0 };
-          }
-          tagsInfo[tag_name].sumX += sound.sp.pos.x;
-          tagsInfo[tag_name].sumY += sound.sp.pos.y;
-          tagsInfo[tag_name].count += 1;
+    console.log('>>> Mise à jour des positions des tags');
+    for (let tag of this.tags) {
+      let sumX = 0;
+      let sumY = 0;
+      for (let sound of sounds_handler.sounds) {
+        if (sound.sd.tags.includes(tag.name)) {
+          sumX += sound.sd.x_mds;
+          sumY += sound.sd.y_mds;
         }
       }
-    }
-    for (let tag of this.tags) {
-      if (tagsInfo[tag.name]) {
-        const info = tagsInfo[tag.name];
-        tag.pos.x = info.sumX / info.count;
-        tag.pos.y = info.sumY / info.count;
-      }
+      tag.pos.x = sumX / tag.nb_occurence;
+      tag.pos.y = sumY / tag.nb_occurence;
     }
   }
 
   show_all_tags() {
     for (let tag of this.tags) {
-      tag.displayed = true;
+      tag.display_center = true;
     }
   }
 
   hide_all_tags() {
     for (let tag of this.tags) {
-      tag.displayed = false;
+      tag.display_center = false;
     }
   }
 
-
-
+  reset_all_tag_filters() {
+    for (let tag of this.tags) {
+      tag.filter_sounds = false;
+    }
   }
+
+}
